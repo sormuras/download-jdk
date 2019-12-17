@@ -2,7 +2,7 @@ name: test
 on: push
 jobs:
   jdk:
-    name: "JDK ${{ matrix.java }}"
+    name: "JDK ${{ matrix.feature }}"
     strategy:
       fail-fast: false
       matrix:
