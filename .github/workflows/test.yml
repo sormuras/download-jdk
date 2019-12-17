@@ -8,3 +8,4 @@ jobs:
     - uses: ./
       with:
         feature: 13
+    - run: java --version
