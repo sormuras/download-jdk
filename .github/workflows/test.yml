@@ -11,10 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
+      id: jdk
       with:
         feature: ${{ matrix.feature }}
     - uses: actions/setup-java@v1
       with:
-        java-version: "${{ env.JAVA_VERSION }}"
-        jdkFile: "${{ env.JDK_FILE }}"
+        java-version: ${{ steps.jdk.outputs.version }}
+        jdkFile: "${{ steps.jdk.outputs.file }}"
     - run: java --version
