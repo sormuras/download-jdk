@@ -2,13 +2,12 @@ name: test
 on: push
 jobs:
   jdk:
-    name: "${{ matrix.os }} + JDK ${{ matrix.java }}"
+    name: "JDK ${{ matrix.java }}"
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
-        java: [14, 13]
-    runs-on: ${{ matrix.os }}
+        java: [14, 13, 11, 8]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - uses: ./
