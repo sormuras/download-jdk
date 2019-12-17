@@ -6,13 +6,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [14, 13, 11, 8]
+        feature: [14, 13]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - uses: ./
       with:
-        feature: ${{ matrix.java }}
+        feature: ${{ matrix.feature }}
     - uses: actions/setup-java@v1
       with:
         java-version: "${{ env.JAVA_VERSION }}"
