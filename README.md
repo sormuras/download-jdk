@@ -1,23 +1,29 @@
-# Hello world docker action
+# Download JDK action
 
-This action prints "Hello World" to the log or "Hello" + the name of a person to greet. To learn how this action was built, see "[Creating a Docker container action](https://help.github.com/en/articles/creating-a-docker-container-action)" in the GitHub Help documentation.
+Download JDK from https://jdk.java.net
 
 ## Inputs
 
-### `who-to-greet`
+### `feature`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** The feature number of the JDK to be downloaded.
+Defaults to `"14"` for the time being -- will default to the highest feature number available.
 
 ## Outputs
 
-### `time`
+### `jdk-file`
 
-The time we greeted you.
+The downloaded JDK archive.
 
 ## Example usage
 
 ```yaml
-uses: actions/hello-world-docker-action@master
-with:
-  who-to-greet: 'Mona the Octocat'
+- uses: sormuras/download-jdk@master
+  with:
+    feature: '14'
+- uses: actions/setup-java@v1
+  with:
+    java-version: "${{ env.JAVA_VERSION }}"
+    jdkFile: "${{ env.JDK_FILE }}"
+- run: java --version
 ```
