@@ -1,15 +1,15 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Download OpenJDK'
+description: 'Download OpenJDK from https://jdk.java.net'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  feature:
+    description: 'Feature number of the JDK to download'
     required: true
-    default: 'World'
+    default: '14'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  jdk-file:
+    description: 'The path to the downloaded file'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.feature }}
