@@ -29,7 +29,7 @@ You may also access the version via `${{ env.JDK_FILE }}`.
 - uses: sormuras/download-jdk@master
   id: jdk
     with:
-      feature: ${{ matrix.feature }}
+      feature: 14
 - uses: actions/setup-java@v1
     with:
       java-version: ${{ steps.jdk.outputs.version }}
@@ -37,12 +37,10 @@ You may also access the version via `${{ env.JDK_FILE }}`.
 - run: java --version
 ```
 
-### Example usage with environment variables
+### Minimal example with default feature and using environment variables
 
 ```yaml
 - uses: sormuras/download-jdk@master
-  with:
-    feature: '14'
 - uses: actions/setup-java@v1
   with:
     java-version: ${{ env.JDK_VERSION }}
