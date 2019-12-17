@@ -1,0 +1,10 @@
+name: test
+on: push
+jobs:
+  jdk-13:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        feature: 13
