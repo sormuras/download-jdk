@@ -6,7 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        feature: [15, 14, 13]
+        feature: [15, 14]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
