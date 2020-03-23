@@ -1,6 +1,6 @@
 # Download "latest-and-greatest" JDK action
 
-Download JDK from https://jdk.java.net, including earyl-access versions.
+Download JDK from https://jdk.java.net, including early-access versions.
 
 ## Inputs
 
