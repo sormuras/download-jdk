@@ -17,6 +17,7 @@ wget --directory-prefix ${HOME} ${JAVA_URL}
 
 echo ::set-env name=JDK_FILE::${JDK_FILE}
 echo ::set-env name=JDK_VERSION::${JDK_VERSION}
+echo ::set-env name=JAVA_VERSION::${JDK_VERSION}
 
 echo ::set-output name=file::${JDK_FILE}
 echo ::set-output name=version::${JDK_VERSION}
