@@ -1,11 +1,15 @@
 #!/bin/sh -l
 
 FEATURE=$1
+OS='linux-x64'
 
 echo "Download JDK ${FEATURE}..."
 
-wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-JAVA_URL=$(sh install-jdk.sh --verbose --feature ${FEATURE} --dry-run --emit-url | tail --lines 1)
+JAVA_NET="https://jdk.java.net/${feature}"
+DOWNLOAD='https://download.java.net/java'
+
+CANDIDATES=$(wget --quiet --output-document - ${JAVA_NET} | grep -Eo 'href[[:space:]]*=[[:space:]]*"[^\"]+"' | grep -Eo '(http|https)://[^"]+')
+JAVA_URL=$(echo "${CANDIDATES}" | grep -Eo "${DOWNLOAD}/.+/jdk${FEATURE}.*/.*GPL/.*jdk-${FEATURE}.+${OS}_bin(.tar.gz|.zip)$" || true)
 
 JDK_FILE="/home/runner/work/_temp/_github_home/$(basename ${JAVA_URL})"
 JDK_VERSION=${FEATURE}
