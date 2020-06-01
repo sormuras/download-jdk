@@ -5,7 +5,7 @@ FEATURE=$1
 echo "Download JDK ${FEATURE}..."
 
 wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-JAVA_URL=$(./install-jdk.sh --verbose --feature ${FEATURE} --dry-run --emit-url | tail --lines 1)
+JAVA_URL=$(sh install-jdk.sh --verbose --feature ${FEATURE} --dry-run --emit-url | tail --lines 1)
 
 JDK_FILE="/home/runner/work/_temp/_github_home/$(basename ${JAVA_URL})"
 JDK_VERSION=${FEATURE}
