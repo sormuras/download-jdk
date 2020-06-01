@@ -14,12 +14,12 @@ Defaults to `14` for the time being -- will default to the highest feature numbe
 ### `file`
 
 The local path to the downloaded JDK archive.
-You may also access the path via `${{ env.JDK_VERSION }}`.
+You may also access the path via `${{ env.JDK_FILE }}`.
 
 ### `version`
 
 The version of the downloaded JDK archive.
-You may also access the version via `${{ env.JDK_FILE }}`.
+You may also access the version via `${{ env.JDK_VERSION }}`.
 
 ## Examples
 
