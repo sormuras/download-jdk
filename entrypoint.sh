@@ -6,7 +6,7 @@ OS='linux-x64'
 echo "Download JDK ${FEATURE}..."
 
 PROPERTIES='https://github.com/sormuras/bach/raw/master/install-jdk.properties'
-JAVA_URL=$(wget --quiet --output-document - ${PROPERTIES} | grep -i "${FEATURE}-${OS}" | awk -F "=" '{print $2}')
+JAVA_URL=$(wget --quiet --output-document - ${PROPERTIES} | grep -i "${FEATURE}-${OS}=" | awk -F "=" '{print $2}')
 
 echo "JAVA_URL=${JAVA_URL}"
 
