@@ -5,11 +5,8 @@ OS='linux-x64'
 
 echo "Download JDK ${FEATURE}..."
 
-JAVA_NET="https://jdk.java.net/${feature}"
-DOWNLOAD='https://download.java.net/java'
-
-CANDIDATES=$(wget --quiet --output-document - ${JAVA_NET} | grep -Eo 'href[[:space:]]*=[[:space:]]*"[^\"]+"' | grep -Eo '(http|https)://[^"]+')
-JAVA_URL=$(echo "${CANDIDATES}" | grep -Eo "${DOWNLOAD}/.+/jdk${FEATURE}.*/.*GPL/.*jdk-${FEATURE}.+${OS}_bin(.tar.gz|.zip)$" || true)
+PROPERTIES="https://github.com/sormuras/bach/raw/master/install-jdk.properties"
+JAVA_URL=$(wget --quiet --output-document - ${PROPERTIES} | grep -i "${feature}-${os}" | awk -F "=" '{print $2}')
 
 JDK_FILE="/home/runner/work/_temp/_github_home/$(basename ${JAVA_URL})"
 JDK_VERSION=${FEATURE}
