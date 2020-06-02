@@ -2,20 +2,24 @@ name: test
 on: push
 jobs:
   jdk:
-    name: "JDK ${{ matrix.feature }}"
+    name: "JDK ${{ matrix.feature }} on ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
-        feature: [15, 14]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest]
+        feature: [15, 14, 13, 12, 11, 10, 9]
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v1
-    - uses: ./
-      id: jdk
-      with:
-        feature: ${{ matrix.feature }}
-    - uses: actions/setup-java@v1
-      with:
-        java-version: ${{ steps.jdk.outputs.version }}
-        jdkFile: "${{ steps.jdk.outputs.file }}"
-    - run: java --version
+      - name: 'Checkout sources'
+        uses: actions/checkout@v2
+      - name: 'Download JDK'
+        uses: ./
+        id: jdk
+        with:
+          feature: ${{ matrix.feature }}
+      - name: 'Set up JDK'
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ steps.jdk.outputs.version }}
+          jdkFile: "${{ steps.jdk.outputs.file }}"
+      - run: java --version
