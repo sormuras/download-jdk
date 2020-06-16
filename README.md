@@ -7,7 +7,7 @@ Download JDK from https://jdk.java.net, including early-access versions.
 ### `feature`
 
 **Required** The feature number of the JDK to be downloaded.
-Defaults to `14` for the time being -- will default to the highest feature number available, soon.
+Defaults to `14` for the time being -- will default to the highest GA feature number available, soon.
 
 ## Outputs
 
@@ -26,7 +26,7 @@ You may also access the version via `${{ env.JDK_VERSION }}`.
 ### Example usage with outputs
 
 ```yaml
-- uses: sormuras/download-jdk@master
+- uses: sormuras/download-jdk@v1
   id: jdk
     with:
       feature: 14
@@ -40,7 +40,7 @@ You may also access the version via `${{ env.JDK_VERSION }}`.
 ### Minimal example with default feature and using environment variables
 
 ```yaml
-- uses: sormuras/download-jdk@master
+- uses: sormuras/download-jdk@v1
 - uses: actions/setup-java@v1
   with:
     java-version: ${{ env.JDK_VERSION }}
