@@ -14,11 +14,13 @@ Defaults to `14` for the time being -- will default to the highest GA feature nu
 ### `file`
 
 The local path to the downloaded JDK archive.
+
 You may also access the path via `${{ env.JDK_FILE }}`.
 
 ### `version`
 
 The version of the downloaded JDK archive.
+
 You may also access the version via `${{ env.JDK_VERSION }}`.
 
 ## Examples
@@ -33,7 +35,7 @@ You may also access the version via `${{ env.JDK_VERSION }}`.
 - uses: actions/setup-java@v1
     with:
       java-version: ${{ steps.jdk.outputs.version }}
-      jdkFile: "${{ steps.jdk.outputs.file }}"
+      jdkFile: ${{ steps.jdk.outputs.file }}
 - run: java --version
 ```
 
