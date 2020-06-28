@@ -6,10 +6,10 @@ inputs:
     required: true
     default: '14'
 outputs:
-  jdk-file:
+  file:
     description: 'The path to the downloaded file'
+  version:
+    description: 'The feature version of the downloaded OpenJDK'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.feature }}
+  using: 'node12'
+  main: 'dist/index.js'
