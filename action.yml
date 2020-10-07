@@ -26,7 +26,4 @@ runs:
       id: info
       shell: bash
       run: |
-        echo "runner.os=${{ runner.os }}"
-        echo "inputs.feature=${{ inputs.feature }}"
-        echo "JAVA_HOME_11_X64=${JAVA_HOME_11_X64}"
         "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java"
