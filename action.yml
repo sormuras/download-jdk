@@ -1,15 +1,38 @@
-name: 'Download OpenJDK'
-description: 'Download OpenJDK from https://jdk.java.net'
+name: 'Download JDK'
+description: 'Download JDK from https://jdk.java.net'
+
+branding:
+  icon: 'download-cloud'
+  color: 'orange'
+
 inputs:
   feature:
     description: 'Feature number of the JDK to download'
     required: true
-    default: '14'
+    default: '15'
+
 outputs:
   file:
     description: 'The path to the downloaded file'
+    value: ${{ steps.info.outputs.file }}
   version:
-    description: 'The feature version of the downloaded OpenJDK'
+    description: 'The feature version of the downloaded JDK'
+    value: ${{ inputs.feature }}
+
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: 'Gather information'
+      id: info
+      shell: bash
+      run: |
+        os='linux-x64'
+        os=$([ "${{ runner.os }}" = "macOS" ] && echo "osx-x64")
+        os=$([ "${{ runner.os }}" = "Windows" ] && echo "windows-x64")
+        properties='https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties'
+        url=$(wget --quiet --output-document - ${properties} | grep -i "${{ inputs.feature }}-${os}=" | awk -F "=" '{print $2}')
+        echo "url=${url}"
+        echo "::set-env name=JDK_FILE::${JDK_FILE}"
+        echo "::set-env name=JDK_VERSION::${JDK_VERSION}"
+        echo "::set-output name=file::${JDK_FILE}"
+        echo "::set-output name=version::${JDK_VERSION}"

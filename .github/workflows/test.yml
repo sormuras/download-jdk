@@ -1,41 +1,27 @@
 name: test
-on: [push, pull_request]
+
+on: [ push, pull_request ]
+
 jobs:
-  build:
-    name: "Build GitHub Action"
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout sources'
-        uses: actions/checkout@v2
-      - name: Setup Node.js 12
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: npm install
-        run: npm install
-      - name: Lint
-        run: npm run format-check
-      - name: npm test
-        run: npm test
   jdk:
     name: "JDK ${{ matrix.feature }} on ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        feature: [16, 15, 14, 13, 12, 11, 10, 9]
+        os: [ ubuntu-latest, windows-latest ]
+        feature: [ 16, 15, 14, 13, 12, 11, 10, 9 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: 'Checkout sources'
+      - name: 'Check out repository'
         uses: actions/checkout@v2
       - name: 'Download JDK'
         id: download-jdk
         uses: ./
         with:
           feature: ${{ matrix.feature }}
-      - name: 'Set up JDK'
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ steps.download-jdk.outputs.version }}
-          jdkFile: "${{ steps.download-jdk.outputs.file }}"
-      - run: java --version
+#      - name: 'Set up JDK'
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: ${{ steps.download-jdk.outputs.version }}
+#          jdkFile: "${{ steps.download-jdk.outputs.file }}"
+#      - run: java --version
