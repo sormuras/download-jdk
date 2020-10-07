@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: 'Download JDK'
         id: download-jdk
-        uses: ./
+        uses: sormuras/download-jdk@main
         with:
           feature: ${{ matrix.feature }}
 #      - name: 'Set up JDK'
