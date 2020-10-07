@@ -14,7 +14,7 @@ inputs:
 outputs:
   file:
     description: 'The path to the downloaded file'
-    value: ${{ steps.info.outputs.file }}
+    value: '?'
   version:
     description: 'The feature version of the downloaded JDK'
     value: ${{ inputs.feature }}
@@ -32,7 +32,3 @@ runs:
         properties='https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties'
         url=$(wget --quiet --output-document - ${properties} | grep -i "${{ inputs.feature }}-${os}=" | awk -F "=" '{print $2}')
         echo ${url}
-#        echo "::set-env name=JDK_FILE::${JDK_FILE}"
-#        echo "::set-env name=JDK_VERSION::${JDK_VERSION}"
-        echo "::set-output name=file::${url}"
-        echo "::set-output name=version::${{ inputs.feature }}"
