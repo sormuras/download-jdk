@@ -26,9 +26,12 @@ runs:
       id: info
       shell: bash
       run: |
-        action_os='linux-x64'
-        # action_os=$([ "${{ github.runner.os }}" = "macOS" ] && echo "osx-x64")
-        # action_os=$([ "${{ github.runner.os }}" = "Windows" ] && echo "windows-x64")
-        action_properties='https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties'
-        action_url=$(wget --quiet --output-document - ${action_properties} | grep -i "${{ inputs.feature }}-${action_os}=" | awk -F "=" '{print $2}')
-        echo ${action_url}
+        echo "runner.os=${{ runner.os }}"
+        echo "inputs.feature=${{ inputs.feature }}"
+        #
+        os='linux-x64'
+        # os=$([ "${{ runner.os }}" = "macOS" ] && echo "osx-x64")
+        # os=$([ "${{ runner.os }}" = "Windows" ] && echo "windows-x64")
+        properties='https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties'
+        url=$(wget --quiet --output-document - ${properties} | grep -i "${{ inputs.feature }}-${os}=" | awk -F "=" '{print $2}')
+        echo ${url}
