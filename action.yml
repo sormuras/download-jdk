@@ -29,3 +29,4 @@ runs:
         echo "runner.os=${{ runner.os }}"
         echo "inputs.feature=${{ inputs.feature }}"
         echo "JAVA_HOME_11_X64=${JAVA_HOME_11_X64}"
+        ${JAVA_HOME_11_X64}/bin/java java/DownloadJDK.java
