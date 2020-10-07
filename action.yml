@@ -26,4 +26,4 @@ runs:
       id: info
       shell: bash
       run: |
-        "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java"
+        "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java" ${{ inputs.feature }}
