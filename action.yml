@@ -31,8 +31,8 @@ runs:
         os=$([ "${{ runner.os }}" = "Windows" ] && echo "windows-x64")
         properties='https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties'
         url=$(wget --quiet --output-document - ${properties} | grep -i "${{ inputs.feature }}-${os}=" | awk -F "=" '{print $2}')
-        echo "url=${url}"
-        echo "::set-env name=JDK_FILE::${JDK_FILE}"
-        echo "::set-env name=JDK_VERSION::${JDK_VERSION}"
-        echo "::set-output name=file::${JDK_FILE}"
-        echo "::set-output name=version::${JDK_VERSION}"
+        echo ${url}
+#        echo "::set-env name=JDK_FILE::${JDK_FILE}"
+#        echo "::set-env name=JDK_VERSION::${JDK_VERSION}"
+        echo "::set-output name=file::${url}"
+        echo "::set-output name=version::${{ inputs.feature }}"
