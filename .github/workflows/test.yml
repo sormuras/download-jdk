@@ -19,6 +19,12 @@ jobs:
         uses: sormuras/download-jdk@main
         with:
           feature: ${{ matrix.feature }}
+      - name: 'Print outputs'
+        run: |
+          echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
+          echo "env.JDK_VERSION                    = ${{ env.JDK_FILE }}"
+          echo "steps.download-jdk.outputs.version = ${{ steps.download-jdk.outputs.version }}"
+          echo "steps.download-jdk.outputs.file    = ${{ steps.download-jdk.outputs.file }}"
 #      - name: 'Set up JDK'
 #        uses: actions/setup-java@v1
 #        with:

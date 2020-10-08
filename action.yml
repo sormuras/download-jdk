@@ -14,7 +14,7 @@ inputs:
 outputs:
   file:
     description: 'The path to the downloaded file'
-    value: '?'
+    value: ${{ steps.download.outputs.file }}
   version:
     description: 'The feature version of the downloaded JDK'
     value: ${{ inputs.feature }}
@@ -22,8 +22,12 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: 'Gather information'
-      id: info
+    - name: 'Download'
+      id: download
       shell: bash
       run: |
         "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java" ${{ inputs.feature }}
+        JDK_FILE=$(cat .download-jdk.file)
+        echo "::set-output name=file::${JDK_FILE}"
+        echo "::set-env name=JDK_FILE::${JDK_FILE}"
+        echo "::set-env name=JDK_VERSION::${{ inputs.feature }}"
