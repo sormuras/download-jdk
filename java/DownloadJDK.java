@@ -52,7 +52,7 @@ class DownloadJDK {
     System.out.println("  >> " + path);
     try (var source = Channels.newChannel(url.openStream());
          var target = new FileOutputStream(path.toFile()).getChannel()) {
-      // target.transferFrom(source, 0, Long.MAX_VALUE);
+      target.transferFrom(source, 0, Long.MAX_VALUE);
     }
     return path;
   }
