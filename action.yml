@@ -29,5 +29,5 @@ runs:
         "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java" ${{ inputs.feature }}
         JDK_FILE=$(cat .download-jdk.file)
         echo "::set-output name=file::${JDK_FILE}"
-        echo "::set-env name=JDK_FILE::${JDK_FILE}"
-        echo "::set-env name=JDK_VERSION::${{ inputs.feature }}"
+        echo "JDK_FILE=${JDK_FILE}" >> $GITHUB_ENV
+        echo "JDK_VERSION=${{ inputs.feature }}" >> $GITHUB_ENV
