@@ -35,9 +35,11 @@ runs:
       shell: bash
       run: |
         if [ "$RUNNER_OS" == "macOS" ]; then
+          tar --list --file ${JDK_FILE}
           JDK_EXTRACTED=${HOME}/downloaded-jdk
           mkdir ${JDK_EXTRACTED}
           tar --extract --file ${JDK_FILE} -C ${JDK_EXTRACTED} --strip-components 4
           rm ${JDK_FILE}
-          tar cvfz ${JDK_FILE} ${JDK_EXTRACTED}
+          tar cfz ${JDK_FILE} ${JDK_EXTRACTED}
+          tar --list --file ${JDK_FILE}
         fi
