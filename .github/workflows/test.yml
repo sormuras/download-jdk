@@ -23,7 +23,7 @@ jobs:
 
       - name: 'Download JDK'
         id: download-jdk
-        uses: sormuras/download-jdk@main
+        uses: ./
         with:
           feature: ${{ matrix.feature }}
 
