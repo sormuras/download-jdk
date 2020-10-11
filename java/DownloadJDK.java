@@ -17,7 +17,7 @@ class DownloadJDK {
     System.out.println("Download JDK " + feature + " (" + os + "-" + arch + ")");
     // System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
 
-    var properties = browse("https://github.com/sormuras/bach/raw/HEAD/install-jdk.properties");
+    var properties = browse("https://github.com/sormuras/bach/raw/master/install-jdk.properties");
     var pro = new Properties();
     pro.load(new StringReader(properties));
     var uri = pro.getProperty(feature + "-" + os + "-" + arch);
