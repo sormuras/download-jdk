@@ -3,43 +3,108 @@ name: test
 on: [ push, pull_request ]
 
 jobs:
-  jdk:
+  features:
     name: "JDK ${{ matrix.feature }} on ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
-        os:  [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 16, 15, 14, 13, 12, 11, 10, 9]
-        exclude:
-          - { os: macos-latest, feature: 13 }
-          - { os: macos-latest, feature: 12 }
-          - { os: macos-latest, feature: 11 }
-          - { os: macos-latest, feature: 10 }
-          - { os: macos-latest, feature:  9 }
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        feature: [ 16, 15 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v2
-
       - name: 'Download JDK'
         id: download-jdk
         uses: ./
         with:
           feature: ${{ matrix.feature }}
-
       - name: 'Print outputs'
+        shell: bash
         run: |
-          echo "Outputs"
-          echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
-          echo "env.JDK_VERSION                    = ${{ env.JDK_FILE }}"
-          echo "steps.download-jdk.outputs.version = ${{ steps.download-jdk.outputs.version }}"
+          echo 'Outputs'
           echo "steps.download-jdk.outputs.file    = ${{ steps.download-jdk.outputs.file }}"
-
+          echo "steps.download-jdk.outputs.version = ${{ steps.download-jdk.outputs.version }}"
+          echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
+          echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
       - name: 'Set up JDK'
         uses: actions/setup-java@v1
         with:
           java-version: ${{ steps.download-jdk.outputs.version }}
           jdkFile: "${{ steps.download-jdk.outputs.file }}"
+      - name: 'Print Java version'
+        run: java --version
 
+  archives:
+    name: "Archived JDK ${{ matrix.feature }} on ${{ matrix.os }}"
+    needs: [ features ]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        feature: [ 14, 13, 12, 11, 10, 9 ]
+        exclude:
+          - { os: macos-latest, feature: 13 }
+          - { os: macos-latest, feature: 12 }
+          - { os: macos-latest, feature: 11 }
+          - { os: macos-latest, feature: 10 }
+          - { os: macos-latest, feature: 9 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v2
+      - name: 'Download JDK'
+        id: download-jdk
+        uses: ./
+        with:
+          feature: ${{ matrix.feature }}
+      - name: 'Print outputs'
+        shell: bash
+        run: |
+          echo 'Outputs'
+          echo "steps.download-jdk.outputs.file    = ${{ steps.download-jdk.outputs.file }}"
+          echo "steps.download-jdk.outputs.version = ${{ steps.download-jdk.outputs.version }}"
+          echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
+          echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
+      - name: 'Set up JDK'
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ steps.download-jdk.outputs.version }}
+          jdkFile: "${{ steps.download-jdk.outputs.file }}"
+      - name: 'Print Java version'
+        run: java --version
+
+  projects:
+    name: "Project ${{ matrix.project }} on ${{ matrix.os }}"
+    needs: [ features, archives ]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        project: [ Loom, Panama, Valhalla ]
+        exclude:
+          - { os: macos-latest, project: Valhalla } # missing 'libjli.dylib'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v2
+      - name: 'Download JDK'
+        id: download-jdk
+        uses: ./
+        with:
+          feature: ${{ matrix.project }}
+      - name: 'Print outputs'
+        shell: bash
+        run: |
+          echo 'Outputs'
+          echo "steps.download-jdk.outputs.file    = ${{ steps.download-jdk.outputs.file }}"
+          echo "steps.download-jdk.outputs.version = ${{ steps.download-jdk.outputs.version }}"
+          echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
+          echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
+      - name: 'Set up JDK'
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ steps.download-jdk.outputs.version }}
+          jdkFile: "${{ steps.download-jdk.outputs.file }}"
       - name: 'Print Java version'
         run: java --version

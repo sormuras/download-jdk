@@ -7,7 +7,7 @@ branding:
 
 inputs:
   feature:
-    description: 'Feature number of the JDK to download'
+    description: 'Feature version number or project name of the JDK to download from https://jdk.java.net'
     required: true
     default: '15'
 
@@ -16,8 +16,8 @@ outputs:
     description: 'The path to the downloaded file'
     value: ${{ steps.download.outputs.file }}
   version:
-    description: 'The feature version of the downloaded JDK'
-    value: ${{ inputs.feature }}
+    description: 'The version of the downloaded JDK'
+    value: ${{ steps.download.outputs.version }}
 
 runs:
   using: 'composite'
@@ -26,11 +26,9 @@ runs:
       id: download
       shell: bash
       run: |
+        echo "::set-output name=file::JDK_ARCHIVE_NOT_DOWNLOADED_YET"
+        echo "::set-output name=version::UNKNOWN_VERSION"
         "${JAVA_HOME_11_X64}/bin/java" "${{ github.action_path }}/java/DownloadJDK.java" ${{ inputs.feature }}
-        JDK_FILE=$(cat .download-jdk.file)
-        echo "::set-output name=file::${JDK_FILE}"
-        echo "JDK_FILE=${JDK_FILE}" >> $GITHUB_ENV
-        echo "JDK_VERSION=${{ inputs.feature }}" >> $GITHUB_ENV
     - name: 'Repackage tarball on Mac OS'
       shell: bash
       run: |
