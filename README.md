@@ -1,13 +1,26 @@
 # Download "latest-and-greatest" JDK action
 
-Download JDK from https://jdk.java.net, including early-access versions.
+Download a JDK from https://jdk.java.net, including Early-Access builds.
+
+Use the downloaded JDK file and its version as inputs for [actions/setup-java@v1](https://github.com/actions/setup-java).
 
 ## Inputs
 
 ### `feature`
 
-**Required** The feature number of the JDK to be downloaded.
+**Required** The feature number or the project name of the JDK to be downloaded.
 Defaults to `15` for the time being -- will default to the highest GA feature number available, soon.
+
+Possible values include:
+- `16`
+- **`15`**
+- `14`
+- `Loom`
+- `Panama`
+- `Valhalla`
+
+[Archived versions](https://jdk.java.net/archive) are supported, too, in order to help developers debug issues in older systems.
+They are not updated with the latest security patches and are not recommended for use in production.
 
 ## Outputs
 
@@ -25,13 +38,13 @@ You may also access the version via `${{ env.JDK_VERSION }}`.
 
 ## Examples
 
-### Example usage with passing Action outputs to `setup-java`
+### Example usage with passing outputs to `actions/setup-java`
 
 ```yaml
 - uses: sormuras/download-jdk@v1
   id: jdk
     with:
-      feature: 15
+      feature: Loom
 - uses: actions/setup-java@v1
     with:
       java-version: ${{ steps.jdk.outputs.version }}
