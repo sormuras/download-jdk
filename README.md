@@ -43,12 +43,12 @@ You may also access the version via `${{ env.JDK_VERSION }}`.
 ```yaml
 - uses: sormuras/download-jdk@v1
   id: jdk
-    with:
-      feature: Loom
+  with:
+    feature: Loom
 - uses: actions/setup-java@v1
-    with:
-      java-version: ${{ steps.jdk.outputs.version }}
-      jdkFile: ${{ steps.jdk.outputs.file }}
+  with:
+    java-version: ${{ steps.jdk.outputs.version }}
+    jdkFile: ${{ steps.jdk.outputs.file }}
 - run: java --version
 ```
 
