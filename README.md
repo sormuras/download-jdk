@@ -14,7 +14,6 @@ Defaults to `15` for the time being -- will default to the highest GA feature nu
 Possible values include:
 - `16`
 - **`15`**
-- `14`
 - `Loom`
 - `Panama`
 - `Valhalla`
