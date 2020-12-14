@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 16, 15 ]
+        feature: [ 17, 16, 15 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Check out repository'
