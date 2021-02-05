@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 class DownloadJDK {
   public static void main(String... args) throws Exception {
-    var feature = args.length == 0 ? "15" : args[0].toLowerCase();
+    var feature = args.length == 0 ? "16" : args[0].toLowerCase();
     var os = computeOs();
     var arch = computeArch();
 
@@ -93,7 +93,11 @@ class DownloadJDK {
     var path = Files.createTempDirectory("download-jdk-").resolve(file);
     System.out.println("  << " + url);
     System.out.println("  >> " + path);
-    if (!Boolean.getBoolean("ry-run")) {
+    if (Boolean.getBoolean("ry-run")) {
+      System.out.println("//");
+      System.out.println("// Dry-run mode - skip download");
+      System.out.println("//");
+    } else {
       try (var source = Channels.newChannel(url.openStream());
           var target = new FileOutputStream(path.toFile()).getChannel()) {
         target.transferFrom(source, 0, Long.MAX_VALUE);
