@@ -9,7 +9,7 @@ inputs:
   feature:
     description: 'Feature version number or project name of the JDK to download from https://jdk.java.net'
     required: true
-    default: '15'
+    default: '16'
 
 outputs:
   file:

@@ -9,12 +9,12 @@ Use the downloaded JDK file and its version as inputs for [actions/setup-java@v1
 ### `feature`
 
 **Required** The feature number or the project name of the JDK to be downloaded.
-Defaults to `15` for the time being -- will default to the highest GA feature number available, soon.
+Defaults to `16` for the time being -- will default to the highest GA feature number available, soon.
 
 Possible values include:
 - `17`
-- `16`
-- **`15`**
+- **`16`**
+- `15`
 - `Loom`
 - `Panama`
 - `Valhalla`
