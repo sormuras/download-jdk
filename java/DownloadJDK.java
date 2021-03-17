@@ -2,16 +2,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
-import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -41,9 +39,9 @@ class DownloadJDK {
   }
 
   private static void setEnv(String name, Object value) throws Exception {
-    var env = Optional.ofNullable(System.getenv("GITHUB_ENV"));
+    var env = Objects.requireNonNullElse(System.getenv("GITHUB_ENV"), ".download-jdk.env");
     var line = name + "=" + value + System.lineSeparator();
-    Files.writeString(Path.of(env.orElse(".download-jdk.env")), line, UTF_8, CREATE, APPEND);
+    Files.writeString(Path.of(env), line, UTF_8, CREATE, APPEND);
   }
 
   private static String computeOs() {
@@ -98,9 +96,9 @@ class DownloadJDK {
       System.out.println("// Dry-run mode - skip download");
       System.out.println("//");
     } else {
-      try (var source = Channels.newChannel(url.openStream());
-          var target = new FileOutputStream(path.toFile()).getChannel()) {
-        target.transferFrom(source, 0, Long.MAX_VALUE);
+      try (var source = url.openStream();
+           var target = Files.newOutputStream(path)) {
+        source.transferTo(target);
       }
     }
     return path;
