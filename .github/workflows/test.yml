@@ -107,7 +107,7 @@ jobs:
           echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
           echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
       - name: 'Set up JDK'
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ steps.download-jdk.outputs.version }}
           distribution: jdkfile
