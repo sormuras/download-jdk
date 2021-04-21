@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 17, 16, 15 ]
+        feature: [ 17, 16 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Check out repository'
@@ -46,7 +46,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 14, 13, 12, 11, 10, 9 ]
+        feature: [ 15, 14, 13, 12, 11, 10, 9 ]
         exclude:
           - { os: macos-latest, feature: 13 }
           - { os: macos-latest, feature: 12 }
@@ -81,7 +81,7 @@ jobs:
 
   projects:
     name: "Project ${{ matrix.project }} on ${{ matrix.os }}"
-    needs: [ features, archives ]
+    needs: [ features ]
     strategy:
       fail-fast: false
       matrix:
