@@ -61,9 +61,15 @@ class DownloadJDK {
   }
 
   private static String computeArch() {
+    //   linux: "aarch64", "x64", "x64-musl"
+    //   macos: "aarch64", "x64"
+    // windows: "x64"
     var env = System.getenv("DOWNLOAD_JDK_ARCH");
     if (env != null) return env;
-    return System.getProperty("os.arch", "x64");
+    var arch = System.getProperty("os.arch", "x64");
+    if (arch.equals("amd64")) return "x64";
+    if (arch.equals("x86_64")) return "x64";
+    return arch;
   }
 
   private static String computeUri(String feature, String os, String arch) throws Exception {
