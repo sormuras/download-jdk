@@ -2,24 +2,22 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
-import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 class DownloadJDK {
   public static void main(String... args) throws Exception {
-    var feature = args.length == 0 ? "15" : args[0].toLowerCase();
-    var os = computeOs();
+    var feature = args.length == 0 ? "16" : args[0].toLowerCase();
+    var os = computeOs(feature);
     var arch = computeArch();
 
     System.out.println("Download JDK " + feature + " (" + os + "-" + arch + ")");
@@ -41,20 +39,37 @@ class DownloadJDK {
   }
 
   private static void setEnv(String name, Object value) throws Exception {
-    var env = Optional.ofNullable(System.getenv("GITHUB_ENV"));
+    var env = Objects.requireNonNullElse(System.getenv("GITHUB_ENV"), ".download-jdk.env");
     var line = name + "=" + value + System.lineSeparator();
-    Files.writeString(Path.of(env.orElse(".download-jdk.env")), line, UTF_8, CREATE, APPEND);
+    Files.writeString(Path.of(env), line, UTF_8, CREATE, APPEND);
   }
 
-  private static String computeOs() {
+  private static String computeOs(String feature) {
+    var env = System.getenv("DOWNLOAD_JDK_OS");
+    if (env != null) return env;
     var name = System.getProperty("os.name").toLowerCase();
     if (name.contains("win")) return "windows";
-    if (name.contains("mac")) return "osx";
+    if (name.contains("mac")) {
+      try {
+        var version = Integer.parseInt(feature);
+        return version >= 17 ? "macos" : "osx";
+      } catch (NumberFormatException exception) {
+        return "osx";
+      }
+    }
     return "linux";
   }
 
   private static String computeArch() {
-    return System.getProperty("arch", "x64");
+    //   linux: "aarch64", "x64", "x64-musl"
+    //   macos: "aarch64", "x64"
+    // windows: "x64"
+    var env = System.getenv("DOWNLOAD_JDK_ARCH");
+    if (env != null) return env;
+    var arch = System.getProperty("os.arch", "x64");
+    if (arch.equals("amd64")) return "x64";
+    if (arch.equals("x86_64")) return "x64";
+    return arch;
   }
 
   private static String computeUri(String feature, String os, String arch) throws Exception {
@@ -93,10 +108,14 @@ class DownloadJDK {
     var path = Files.createTempDirectory("download-jdk-").resolve(file);
     System.out.println("  << " + url);
     System.out.println("  >> " + path);
-    if (!Boolean.getBoolean("ry-run")) {
-      try (var source = Channels.newChannel(url.openStream());
-          var target = new FileOutputStream(path.toFile()).getChannel()) {
-        target.transferFrom(source, 0, Long.MAX_VALUE);
+    if (Boolean.getBoolean("ry-run")) {
+      System.out.println("//");
+      System.out.println("// Dry-run mode - skip download");
+      System.out.println("//");
+    } else {
+      try (var source = url.openStream();
+           var target = Files.newOutputStream(path)) {
+        source.transferTo(target);
       }
     }
     return path;
@@ -111,6 +130,7 @@ class DownloadJDK {
       var name = Path.of(URI.create(line).getPath()).getFileName().toString();
       var key = feature + "-" + substring(name, "_", "_bin");
       map.put(key, line);
+      if (key.contains("-macos-")) map.put(key.replace("-macos-", "-osx-"), line);
     }
     return map;
   }

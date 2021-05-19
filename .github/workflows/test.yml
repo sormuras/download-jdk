@@ -1,15 +1,19 @@
 name: test
 
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   features:
     name: "JDK ${{ matrix.feature }} on ${{ matrix.os }}"
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 17, 16, 15 ]
+        feature: [ 17, 16 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Check out repository'
@@ -28,9 +32,10 @@ jobs:
           echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
           echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
       - name: 'Set up JDK'
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ steps.download-jdk.outputs.version }}
+          distribution: jdkfile
           jdkFile: "${{ steps.download-jdk.outputs.file }}"
       - name: 'Print Java version'
         run: java --version
@@ -40,9 +45,10 @@ jobs:
     needs: [ features ]
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 14, 13, 12, 11, 10, 9 ]
+        feature: [ 15, 14, 13, 12, 11, 10, 9 ]
         exclude:
           - { os: macos-latest, feature: 13 }
           - { os: macos-latest, feature: 12 }
@@ -67,9 +73,10 @@ jobs:
           echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
           echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
       - name: 'Set up JDK'
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ steps.download-jdk.outputs.version }}
+          distribution: jdkfile
           jdkFile: "${{ steps.download-jdk.outputs.file }}"
       - name: 'Print Java version'
         run: java --version
@@ -79,6 +86,7 @@ jobs:
     needs: [ features, archives ]
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         project: [ Loom, Panama, Valhalla ]
@@ -102,9 +110,10 @@ jobs:
           echo "env.JDK_FILE                       = ${{ env.JDK_FILE }}"
           echo "env.JDK_VERSION                    = ${{ env.JDK_VERSION }}"
       - name: 'Set up JDK'
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ steps.download-jdk.outputs.version }}
+          distribution: jdkfile
           jdkFile: "${{ steps.download-jdk.outputs.file }}"
       - name: 'Print Java version'
         run: java --version
