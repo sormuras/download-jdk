@@ -130,6 +130,7 @@ class DownloadJDK {
       var name = Path.of(URI.create(line).getPath()).getFileName().toString();
       var key = feature + "-" + substring(name, "_", "_bin");
       map.put(key, line);
+      if (key.contains("-macos-")) map.put(key.replace("-macos-", "-osx-"), line);
     }
     return map;
   }
