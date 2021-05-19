@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 class DownloadJDK {
   public static void main(String... args) throws Exception {
     var feature = args.length == 0 ? "16" : args[0].toLowerCase();
-    var os = computeOs();
+    var os = computeOs(feature);
     var arch = computeArch();
 
     System.out.println("Download JDK " + feature + " (" + os + "-" + arch + ")");
@@ -44,15 +44,26 @@ class DownloadJDK {
     Files.writeString(Path.of(env), line, UTF_8, CREATE, APPEND);
   }
 
-  private static String computeOs() {
+  private static String computeOs(String feature) {
+    var env = System.getenv("DOWNLOAD_JDK_OS");
+    if (env != null) return env;
     var name = System.getProperty("os.name").toLowerCase();
     if (name.contains("win")) return "windows";
-    if (name.contains("mac")) return "osx";
+    if (name.contains("mac")) {
+      try {
+        var version = Integer.parseInt(feature);
+        return version >= 17 ? "macos" : "osx";
+      } catch (NumberFormatException exception) {
+        return "osx";
+      }
+    }
     return "linux";
   }
 
   private static String computeArch() {
-    return System.getProperty("arch", "x64");
+    var env = System.getenv("DOWNLOAD_JDK_ARCH");
+    if (env != null) return env;
+    return System.getProperty("os.arch", "x64");
   }
 
   private static String computeUri(String feature, String os, String arch) throws Exception {
