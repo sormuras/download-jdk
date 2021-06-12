@@ -13,7 +13,7 @@ jobs:
       max-parallel: 3
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        feature: [ 17, 16 ]
+        feature: [ 18, 17, 16 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Check out repository'
