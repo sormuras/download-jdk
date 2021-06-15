@@ -13,6 +13,7 @@ Use the downloaded JDK file and its version as inputs for [actions/setup-java@v2
 Defaults to **`16`** for the time being -- will default to the highest GA feature number available, soon.
 
 Possible values include:
+- `18`
 - `17`
 - **`16`**
 - `Loom`
