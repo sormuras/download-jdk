@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 class DownloadJDK {
   public static void main(String... args) throws Exception {
-    var feature = args.length == 0 ? "16" : args[0].toLowerCase();
+    var feature = args.length == 0 ? "17" : args[0].toLowerCase();
     var os = computeOs(feature);
     var arch = computeArch();
 
