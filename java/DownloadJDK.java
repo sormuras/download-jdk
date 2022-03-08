@@ -76,7 +76,7 @@ class DownloadJDK {
     var key = feature + "-" + os + "-" + arch;
     try {
       Integer.parseInt(feature);
-      var properties = browse("https://github.com/sormuras/bach/raw/master/install-jdk.properties");
+      var properties = browse("https://github.com/sormuras/bach/raw/releases/11/install-jdk.properties");
       var pro = new Properties();
       pro.load(new StringReader(properties));
       return pro.getProperty(key);
